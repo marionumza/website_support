@@ -4,7 +4,7 @@ import re
 
 from odoo import api, fields, models
 from odoo.http import request
-from odoo.tools import html_escape as escape, ustr, image_resize_and_sharpen, image_save_for_web
+#from odoo.tools import html_escape as escape, ustr, image_resize_and_sharpen, image_save_for_web
 
 from odoo.addons.http_routing.models.ir_http import slug
 
