@@ -10,7 +10,7 @@ from odoo import api, fields, models
 class WebsiteSupportSettings(models.Model):
 
     _name = "website.support.settings"
-    _inherit = 'res.config.settings'
+    # _inherit = 'res.config.settings'
 
     close_ticket_email_template_id = fields.Many2one('mail.template', domain="[('model_id','=','website.support.ticket')]", string="(OBSOLETE)Close Ticket Email Template")
     change_user_email_template_id = fields.Many2one('mail.template', domain="[('model_id','=','website.support.ticket')]", string="Change User Email Template")
