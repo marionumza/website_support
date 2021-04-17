@@ -1,6 +1,6 @@
 {
     'name': "Website Help Desk / Support Ticket",
-    'version': "1.0.11",
+    'version': "13.0.1.0.11",
     'author': "Sythil Tech, Adaptive City",
     'category': "Tools",
     'summary': "A helpdesk / support ticket system for your website",

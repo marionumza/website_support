@@ -19,7 +19,7 @@ class WebsiteSupportTicket(models.Model):
     _inherit = ['mail.thread']
     _translate = True
 
-    @api.model
+    # @api.model
     def _read_group_state(self, states, domain, order):
         """ Read group customization in order to display all the states in the
             kanban view, even if they are empty
@@ -98,13 +98,13 @@ class WebsiteSupportTicket(models.Model):
     sla_alert_ids = fields.Many2many('website.support.sla.alert', string="SLA Alerts",
                                      help="Keep record of SLA alerts sent so we do not resend them")
 
-    @api.one
+    # @api.one
     @api.depends('sla_timer')
     def _compute_sla_timer_format(self):
         # Display negative hours in a positive format
         self.sla_timer_format = '{0:02.0f}:{1:02.0f}'.format(*divmod(abs(self.sla_timer) * 60, 60))
 
-    @api.model
+    # @api.model
     def update_sla_timer(self):
 
         # Subtract 1 minute from the timer of all active SLA tickets, this includes going into negative
@@ -162,7 +162,7 @@ class WebsiteSupportTicket(models.Model):
     def resume_sla(self):
         self.sla_active = True
 
-    @api.one
+    # @api.one
     @api.depends('planned_time')
     def _compute_planned_time_format(self):
 
@@ -181,11 +181,11 @@ class WebsiteSupportTicket(models.Model):
         else:
             self.planned_time_format = self.planned_time
 
-    @api.one
+    # @api.one
     def _compute_approve_url(self):
         self.approve_url = "/support/approve/" + str(self.id)
 
-    @api.one
+    # @api.one
     def _compute_disapprove_url(self):
         self.disapprove_url = "/support/disapprove/" + str(self.id)
 
@@ -263,14 +263,14 @@ class WebsiteSupportTicket(models.Model):
 
         return super(WebsiteSupportTicket, self).message_update(msg_dict, update_vals=update_vals)
 
-    @api.one
+    # @api.one
     @api.depends('state_id')
     def _compute_unattend(self):
 
         if self.state_id.unattended == True:
             self.unattended = True
 
-    @api.multi
+    # @api.multi
     def request_approval(self):
 
         approval_email = self.env['ir.model.data'].get_object('website_support', 'support_ticket_approval')
@@ -289,7 +289,7 @@ class WebsiteSupportTicket(models.Model):
             'target': 'new'
         }
 
-    @api.multi
+    # @api.multi
     def open_close_ticket_wizard(self):
 
         return {
@@ -302,13 +302,13 @@ class WebsiteSupportTicket(models.Model):
             'target': 'new'
         }
 
-    @api.model
+    # @api.model
     def _needaction_domain_get(self):
         open_state = self.env['ir.model.data'].get_object('website_support', 'website_ticket_state_open')
         custom_replied_state = self.env['ir.model.data'].get_object('website_support', 'website_ticket_state_customer_replied')
         return ['|',('state', '=', open_state.id ), ('state_id', '=', custom_replied_state.id)]
 
-    @api.model
+    # @api.model
     def create(self, vals):
         # Get next ticket number from the sequence
         vals['ticket_number'] = self.env['ir.sequence'].next_by_code('website.support.ticket')
@@ -371,7 +371,7 @@ class WebsiteSupportTicket(models.Model):
 
         return new_id
 
-    @api.multi
+    # @api.multi
     def write(self, values, context=None):
 
         update_rec = super(WebsiteSupportTicket, self).write(values)
@@ -436,7 +436,7 @@ class WebsiteSupportTicketMessage(models.Model):
     by = fields.Selection([('staff','Staff'), ('customer','Customer')], string="By")
     content = fields.Html(string="Content")
 
-    @api.model
+    # @api.model
     def create(self, values):
 
         new_record = super(WebsiteSupportTicketMessage, self).create(values)
@@ -462,7 +462,7 @@ class WebsiteSupportTicketCategory(models.Model):
     cat_user_ids = fields.Many2many('res.users', string="Category Users")
     access_group_ids = fields.Many2many('res.groups', string="Access Groups", help="Restrict which users can select the category on the website form, none = everyone")
 
-    @api.model
+    # @api.model
     def create(self, values):
         sequence=self.env['ir.sequence'].next_by_code('website.support.ticket.category')
         values['sequence']=sequence
@@ -478,7 +478,7 @@ class WebsiteSupportTicketSubCategory(models.Model):
     parent_category_id = fields.Many2one('website.support.ticket.category', required=True, string="Parent Category")
     additional_field_ids = fields.One2many('website.support.ticket.subcategory.field', 'wsts_id', string="Additional Fields")
 
-    @api.model
+    # @api.model
     def create(self, values):
         sequence=self.env['ir.sequence'].next_by_code('website.support.ticket.subcategory')
         values['sequence']=sequence
@@ -518,7 +518,7 @@ class WebsiteSupportTicketPriority(models.Model):
     name = fields.Char(required=True, translate=True, string="Priority Name")
     color = fields.Char(string="Color")
 
-    @api.model
+    # @api.model
     def create(self, values):
         sequence=self.env['ir.sequence'].next_by_code('website.support.ticket.priority')
         values['sequence']=sequence
@@ -596,7 +596,7 @@ class WebsiteSupportTicketCompose(models.Model):
             values = self.env['mail.compose.message'].generate_email_for_composer(self.template_id.id, [self.ticket_id.id])[self.ticket_id.id]
             self.body = values['body']
 
-    @api.one
+    # @api.one
     def send_reply(self):
 
         #Change the approval state before we send the mail

@@ -21,13 +21,13 @@ class WebsiteSupportHelpGroup(models.Model):
     page_count = fields.Integer(string="Number of Pages", compute='_page_count')
     group_ids = fields.Many2many('res.groups', string="Privilege Groups")
 
-    @api.one
+    # @api.one
     @api.depends('page_ids')
     def _page_count(self):
         """Amount of help pages in a help group"""
         self.page_count = self.env['website.support.help.page'].search_count([('group_id','=',self.id)])
 
-    @api.model
+    # @api.model
     def create(self, values):
         sequence=self.env['ir.sequence'].next_by_code('website.support.help.group')
         values['sequence']=sequence
@@ -48,12 +48,12 @@ class WebsiteSupportHelpPage(models.Model):
     feedback_average = fields.Float(string="Feedback Average Rating", compute="_compute_feedback_average")
     feedback_count = fields.Integer(string="Feedback Count", compute="_compute_feedback_count")
 
-    @api.one
+    # @api.one
     @api.depends('feedback_ids')
     def _compute_feedback_count(self):
         self.feedback_count = len(self.feedback_ids)
 
-    @api.one
+    # @api.one
     @api.depends('feedback_ids')
     def _compute_feedback_average(self):
         average = 0
@@ -66,7 +66,7 @@ class WebsiteSupportHelpPage(models.Model):
         else:
            self.feedback_average = 0
 
-    @api.model
+    # @api.model
     def create(self, values):
         sequence=self.env['ir.sequence'].next_by_code('website.support.help.page')
         values['sequence']=sequence
